@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" x-data>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="images/logo (1).png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/sweetalert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="responsive.css" />
+    <title>VansLegacy | CheckOut</title>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="container">
+      <div class="navbar">
+        <div class="logo">
+          <img src="img/logo/newabi-logo.png" width="125px" />
+        </div>
+        <nav>
+          <ul id="menuItems">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Product</a></li>
+            <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
+            <li><a href="">Contact</a></li>
+            <li><a href="">Account</a></li>
+          </ul>
+        </nav>
+        <div class="cart-icon" x-data="cartPage()">
+          <a href="cart.html">
+            <img src="images/cart.png" width="30px" height="30px" alt="cart" class="cart" />
+            <span class="cart-badge" x-text="cartCount"></span>
+          </a>
+        </div>
+        <img src="images/menu.png" class="menu-icon" onclick="menuToggle()" />
+      </div>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="small-container cart-items" x-data="cartPage()">
+      <template x-if="cart.length > 0">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Sub Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="item in cart" :key="item.id">
+                <tr>
+                  <td>
+                    <div class="cart-info">
+                      <img :src="item.img" alt="" />
+                      <div>
+                        <p x-text="item.name"></p>
+                        <small>Price: <span x-text="rupiah(item.price)"></span></small><br />
+                        <a href="#" @click.prevent="removeFromCart(item.id)">Remove</a>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="number" min="1" :value="item.quantity" @input="updateQty(item.id, parseInt($event.target.value))" />
+                  </td>
+                  <td><span x-text="rupiah(item.price * item.quantity)"></span></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+
+          <div class="total-price">
+            <table>
+              <tr>
+                <td>Sub Total</td>
+                <td><span x-text="rupiah(calculateSubTotal())"></span></td>
+              </tr>
+              <tr>
+                <td>Tax (10%)</td>
+                <td><span x-text="rupiah(calculateTax())"></span></td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td><span x-text="rupiah(calculateTotal())"></span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <a href="#" @click.prevent="checkout()" class="btn"><i class="bx bx-cart"></i> Check Out</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="cart.length === 0">
+        <p>Keranjang kosong. Tambahkan produk untuk melanjutkan.</p>
+      </template>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col-1">
+            <h3>Tentang Kami</h3>
+            <p>Newabi Outdoor adalah penyedia jasa rental alat camping & adventure gear terpercaya sejak 2024.</p>
+          </div>
+          <div class="footer-col-2">
+            <img src="img/logo/newabi-logo.png" alt="Newabi Outdoor" />
+            <p>Petualangan dimulai dari sini.</p>
+          </div>
+          <div class="footer-col-3">
+            <h3>Ikuti Kami</h3>
+            <ul>
+              <li>Instagram</li>
+              <li>TikTok</li>
+              <li>WhatsApp</li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <p class="copyright">© 2024 Newabi Outdoor — Sewa Alat Camping Lengkap untuk Setiap Petualangan</p>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="assets/jquery.js"></script>
+    <script src="assets/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="assets/sweetalert2/sweetalert2.min.js"></script>
+
+    <script>
+      var menuItems = document.getElementById("menuItems");
+      menuItems.style.maxHeight = "0px";
+      function menuToggle() {
+        menuItems.style.maxHeight = menuItems.style.maxHeight == "0px" ? "200px" : "0px";
+      }
+
+      function cartPage() {
+        return {
+          cart: JSON.parse(localStorage.getItem("cartItems") || "[]"),
+
+          get cartCount() {
+            return this.cart.reduce((acc, p) => acc + p.quantity, 0);
+          },
+
+          rupiah(val) {
+            return "Rp " + val.toLocaleString("id-ID");
+          },
+
+          saveCart() {
+            localStorage.setItem("cartItems", JSON.stringify(this.cart));
+          },
+
+          updateQty(id, qty) {
+            const item = this.cart.find((p) => p.id === id);
+            if (!item) return;
+            if (qty < 1) {
+              this.removeFromCart(id);
+            } else {
+              item.quantity = qty;
+            }
+            this.saveCart();
+          },
+
+          removeFromCart(id) {
+            this.cart = this.cart.filter((p) => p.id !== id);
+            this.saveCart();
+          },
+
+          calculateSubTotal() {
+            return this.cart.reduce((acc, p) => acc + p.price * p.quantity, 0);
+          },
+
+          calculateTax() {
+            return this.calculateSubTotal() * 0.1; // contoh 10% tax
+          },
+
+          calculateTotal() {
+            return this.calculateSubTotal() + this.calculateTax();
+          },
+
+          checkout() {
+            Swal.fire("Success", "Checkout berhasil!", "success");
+            this.cart = [];
+            this.saveCart();
+          },
+        };
+      }
+    </script>
+  </body>
+</html>

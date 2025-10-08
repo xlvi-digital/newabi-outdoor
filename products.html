@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" x-data="productPage()">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="images/logo (1).png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="responsive.css" />
+    <link rel="stylesheet" href="assets/sweetalert2/sweetalert2.min.css" />
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("cart", {
+          items: JSON.parse(localStorage.getItem("cartItems") || "[]"),
+          get count() {
+            return this.items.reduce((acc, p) => acc + p.quantity, 0);
+          },
+          add(product) {
+            const existing = this.items.find((p) => p.id === product.id);
+            if (existing) {
+              existing.quantity += product.quantity || 1;
+            } else {
+              this.items.push({ ...product, quantity: product.quantity || 1 });
+            }
+            this.save();
+          },
+          remove(id) {
+            this.items = this.items.filter((p) => p.id !== id);
+            this.save();
+          },
+          save() {
+            localStorage.setItem("cartItems", JSON.stringify(this.items));
+          },
+          clear() {
+            this.items = [];
+            this.save();
+          },
+        });
+      });
+    </script>
+
+    <title>VansLegacy | All Product</title>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="container">
+      <div class="navbar">
+        <div class="logo">
+          <img src="img/logo/newabi-logo.png" width="125px" />
+        </div>
+        <nav>
+          <ul id="menuItems">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Product</a></li>
+            <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
+            <li><a href="">Contact</a></li>
+            <li><a href="">Account</a></li>
+          </ul>
+        </nav>
+
+        <!-- Cart Icon -->
+        <div
+          class="cart-icon"
+          x-data="{ cartCount: 0 }"
+          x-init="
+    cartCount = JSON.parse(localStorage.getItem('cartItems') || '[]').reduce((acc, i) => acc + i.quantity, 0);
+    window.addEventListener('cart-updated', () => {
+        cartCount = JSON.parse(localStorage.getItem('cartItems') || '[]').reduce((acc, i) => acc + i.quantity, 0);
+    });
+"
+        >
+          <a href="cart.html">
+            <img src="images/cart.png" width="30px" height="30px" alt="cart" />
+            <span class="cart-badge" x-text="cartCount">0</span>
+          </a>
+        </div>
+        <img src="images/menu.png" class="menu-icon" onclick="menuToggle()" />
+      </div>
+    </div>
+
+    <!-- All Products -->
+    <div class="small-container pt-5" x-data="allProducts()">
+      <div class="row row-2">
+        <h2>All Products</h2>
+        <input type="search" placeholder="Cari produk..." class="search-box" x-model="searchQuery" />
+      </div>
+
+      <!-- Filter Kategori -->
+      <div class="row mb-3">
+        <button @click="currentCategory='all'" :class="{'link-btn': true, 'active': currentCategory==='all'}">All</button>
+
+        <template x-for="cat in Object.keys(itemsByCategory)" :key="cat">
+          <button @click="currentCategory=cat" :class="{'link-btn': true, 'active': currentCategory===cat}" x-text="cat"></button>
+        </template>
+      </div>
+
+      <!-- Produk -->
+      <div class="row">
+        <template x-for="item in filteredItems" :key="item.id">
+          <div class="col-4">
+            <a :href="`single-product.html?id=${item.id}`">
+              <img :src="item.img" :alt="item.name" class="product-img" />
+            </a>
+            <h4 x-text="item.name"></h4>
+            <p x-text="'Rp ' + item.price.toLocaleString('id-ID') + ' / Hari'"></p>
+            <a @click.prevent="addToCart(item,1)" class="btn" style="font-size: 0.8rem; margin-top: 15px">Add to Cart</a>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col-1">
+            <h3>Tentang Kami</h3>
+            <p>Newabi Outdoor adalah penyedia jasa rental alat camping & adventure gear terpercaya sejak 2024.</p>
+          </div>
+          <div class="footer-col-2">
+            <img src="img/logo/newabi-logo.png" alt="Newabi Outdoor" />
+            <p>Petualangan dimulai dari sini.</p>
+          </div>
+          <div class="footer-col-3">
+            <h3>Ikuti Kami</h3>
+            <ul>
+              <li>Instagram</li>
+              <li>TikTok</li>
+              <li>WhatsApp</li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <p class="copyright">© 2024 Newabi Outdoor — Sewa Alat Camping Lengkap untuk Setiap Petualangan</p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="assets/jquery.js"></script>
+    <script src="assets/sweetalert2/sweetalert2.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="assets/app.js"></script>
+
+    <script>
+      // Toggle menu
+      var menuItems = document.getElementById("menuItems");
+      menuItems.style.maxHeight = "0px";
+      function menuToggle() {
+        menuItems.style.maxHeight = menuItems.style.maxHeight === "0px" ? "200px" : "0px";
+      }
+
+      // Alpine Init
+      document.addEventListener("alpine:init", () => {
+        // Global cart store
+        Alpine.store("cart", {
+          items: [],
+          count: 0,
+          add(product) {
+            const exist = this.items.find((i) => i.id === product.id);
+            if (exist) {
+              exist.quantity += 1;
+            } else {
+              this.items.push({ ...product, quantity: 1 });
+            }
+            this.count = this.items.reduce((acc, i) => acc + i.quantity, 0);
+          },
+          remove(id) {
+            this.items = this.items.filter((i) => i.id !== id);
+            this.count = this.items.reduce((acc, i) => acc + i.quantity, 0);
+          },
+          clear() {
+            this.items = [];
+            this.count = 0;
+          },
+        });
+
+        Alpine.data("productPage", () => ({
+          searchQuery: "",
+          currentCategory: "all",
+          itemsByCategory: {
+            tenda: [
+              { id: 1, name: "Big Dome 6 Pro", img: "img/product/tenda/2.jpg", price: 75000 },
+              { id: 2, name: "Easy Dome 2", img: "img/product/tenda/3.jpg", price: 20000 },
+              { id: 3, name: "Bespot", img: "img/product/tenda/4.jpg", price: 35000 },
+              { id: 4, name: "Borneo 3", img: "img/product/tenda/5.jpg", price: 40000 },
+              { id: 5, name: "Borneo 4", img: "img/product/tenda/1.jpg", price: 50000 },
+            ],
+            carrier: [
+              { id: 6, name: "Daypack", img: "img/product/carrier/2.jpg", price: 10000 },
+              { id: 7, name: "Sunature Futura Pro", img: "img/product/carrier/3.jpg", price: 20000 },
+              { id: 8, name: "Deuter Futura 32", img: "img/product/carrier/4.jpg", price: 35000 },
+              { id: 9, name: "Osprey Kestrey 48", img: "img/product/carrier/1.jpg", price: 40000 },
+            ],
+            masak: [
+              { id: 10, name: "Kompor Kotak", img: "img/product/masak/masak1.jpg", price: 12000 },
+              { id: 11, name: "Kompor Mawar", img: "img/product/masak/masak2.jpg", price: 15000 },
+              { id: 12, name: "Kompor Koper", img: "img/product/masak/masak3.jpg", price: 20000 },
+              { id: 13, name: "Cooking Seet 200", img: "img/product/masak/masak4.jpg", price: 12000 },
+              { id: 14, name: "Cooking Seet 308", img: "img/product/masak/masak5.jpg", price: 15000 },
+              { id: 15, name: "Gas Portable Refil", img: "img/product/masak/masak6.jpg", price: 8000 },
+            ],
+            penerangan: [
+              { id: 16, name: "HeadLamp", img: "img/product/penerangan/penerangan1.jpg", price: 8000 },
+              { id: 17, name: "Headlamp Electric", img: "img/product/penerangan/penerangan2.jpg", price: 10000 },
+              { id: 18, name: "Lampu Tenda", img: "img/product/penerangan/penerangan3.jpg", price: 8000 },
+            ],
+            pribadi: [
+              { id: 19, name: "Sleping Bag", img: "img/product/pribadi/pribadi1.jpg", price: 8000 },
+              { id: 20, name: "Tracking Pole", img: "img/product/pribadi/pribadi2.jpg", price: 10000 },
+              { id: 21, name: "Sarung Tangan", img: "img/product/pribadi/pribadi3.jpg", price: 10000 },
+              { id: 22, name: "Sepatu Tracking", img: "img/product/pribadi/pribadi4.jpg", price: 25000 },
+            ],
+            tambahan: [
+              { id: 23, name: "Matras Spons", img: "img/product/tambahan/tambahan1.jpg", price: 5000 },
+              { id: 24, name: "Matras Lipat Spons", img: "img/product/tambahan/tambahan2.jpg", price: 10000 },
+              { id: 25, name: "Flysheet", img: "img/product/tambahan/tambahan3.jpg", price: 15000 },
+              { id: 26, name: "Meja & Kursi Lipat", img: "img/product/tambahan/tambahan4.jpg", price: 15000 },
+            ],
+          },
+          get filteredItems() {
+            let items = this.currentCategory === "all" ? Object.values(this.itemsByCategory).flat() : this.itemsByCategory[this.currentCategory];
+            if (!this.searchQuery) return items;
+            return items.filter((i) => i.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+          },
+          cart: JSON.parse(localStorage.getItem("cartItems") || "[]"),
+
+          get cartCount() {
+            return this.cart.reduce((acc, item) => acc + item.quantity, 0);
+          },
+
+          addToCart(item, qty = 1) {
+            const existing = this.cart.find((p) => p.id === item.id);
+            if (existing) {
+              existing.quantity += qty;
+            } else {
+              this.cart.push({ ...item, quantity: qty });
+            }
+            localStorage.setItem("cartItems", JSON.stringify(this.cart));
+            window.dispatchEvent(new CustomEvent("cart-updated"));
+            Swal.fire("Success", "Product added to cart", "success");
+          },
+        }));
+      });
+    </script>
+  </body>
+</html>

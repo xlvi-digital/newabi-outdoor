@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" x-data="productPage()">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="images/logo (1).png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/sweetalert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="responsive.css" />
+
+    <title>VansLegacy | Single Product</title>
+
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("cart", {
+          items: JSON.parse(localStorage.getItem("cartItems") || "[]"),
+          get count() {
+            return this.items.reduce((acc, p) => acc + p.quantity, 0);
+          },
+          add(product) {
+            const existing = this.items.find((p) => p.id === product.id);
+            if (existing) {
+              existing.quantity += product.quantity || 1;
+            } else {
+              this.items.push({ ...product, quantity: product.quantity || 1 });
+            }
+            this.save();
+          },
+          remove(id) {
+            this.items = this.items.filter((p) => p.id !== id);
+            this.save();
+          },
+          save() {
+            localStorage.setItem("cartItems", JSON.stringify(this.items));
+            window.dispatchEvent(new Event("cart-updated"));
+          },
+          clear() {
+            this.items = [];
+            this.save();
+          },
+        });
+      });
+    </script>
+    <style>
+      .links-product a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="container">
+      <div class="navbar">
+        <div class="logo">
+          <img src="img/logo/newabi-logo.png" width="125px" />
+        </div>
+        <nav>
+          <ul id="menuItems">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Product</a></li>
+            <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
+            <li><a href="">Contact</a></li>
+            <li><a href="">Account</a></li>
+          </ul>
+        </nav>
+        <div
+          class="cart-icon"
+          x-data="{ cartCount: 0 }"
+          x-init="
+        cartCount = $store.cart.count;
+        window.addEventListener('cart-updated', () => {
+          cartCount = $store.cart.count;
+        });
+      "
+        >
+          <a href="cart.html">
+            <img src="images/cart.png" width="30px" height="30px" alt="cart" />
+            <span class="cart-badge" x-text="cartCount">0</span>
+          </a>
+        </div>
+        <img src="images/menu.png" class="menu-icon" onclick="menuToggle()" />
+      </div>
+    </div>
+
+    <!-- Single Product -->
+    <div class="small-container single-product" x-init="init()">
+      <template x-if="product">
+        <div class="row">
+          <div class="col-2">
+            <img :src="mainImage" width="100%" id="product-img" />
+            <div class="small-img-row">
+              <template x-for="img in product.imgs" :key="img">
+                <div class="small-img-col">
+                  <img :src="img" width="100%" class="small-img" @click="mainImage = img" />
+                </div>
+              </template>
+            </div>
+          </div>
+          <div class="col-2">
+            <p class="links-product">
+              <a href="index.html">Home</a> /
+              <a href="products.html" x-text="categoryName" style="text-transform: capitalize"></a>
+            </p>
+            <h1 x-text="product.name"></h1>
+            <h4 x-text="rupiah(product.price) + ' / Hari'"></h4>
+
+            <input type="number" min="1" x-model.number="quantity" />
+            <a href="#" @click.prevent="addToCart(product, quantity)" class="btn">Add to Cart</a>
+            <h3>Product Detail <i class="bx bx-right-indent"></i></h3>
+            <p x-text="product.desc ? product.desc : 'No description available.'"></p>
+          </div>
+        </div>
+      </template>
+      <template x-if="!product">
+        <p>Produk tidak ditemukan.</p>
+      </template>
+    </div>
+
+    <!-- Related Products -->
+    <div class="small-container">
+      <div class="row row-2">
+        <h2>Related Product</h2>
+        <p>View More</p>
+      </div>
+      <div class="row">
+        <template x-for="item in relatedProducts" :key="item.id">
+          <div class="col-4">
+            <a :href="`single-product.html?id=${item.id}`">
+              <img :src="item.imgs && item.imgs.length > 0 ? item.imgs[0] : 'img/default.jpg'" alt="Product Image" class="product-img" />
+            </a>
+            <h4 x-text="item.name"></h4>
+            <p x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
+            <a href="#" @click.prevent="$store.cart.add({...item, quantity: 1})" class="btn">Add to Cart</a>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Footer -->
+  <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col-1">
+            <h3>Tentang Kami</h3>
+            <p>Newabi Outdoor adalah penyedia jasa rental alat camping & adventure gear terpercaya sejak 2024.</p>
+          </div>
+          <div class="footer-col-2">
+            <img src="img/logo/newabi-logo.png" alt="Newabi Outdoor" />
+            <p>Petualangan dimulai dari sini.</p>
+          </div>
+          <div class="footer-col-3">
+            <h3>Ikuti Kami</h3>
+            <ul>
+              <li>Instagram</li>
+              <li>TikTok</li>
+              <li>WhatsApp</li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <p class="copyright">© 2024 Newabi Outdoor — Sewa Alat Camping Lengkap untuk Setiap Petualangan</p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="assets/jquery.js"></script>
+    <script src="assets/app.js"></script>
+    <script src="assets/sweetalert2/sweetalert2.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+      // Toggle menu
+      var menuItems = document.getElementById("menuItems");
+      menuItems.style.maxHeight = "0px";
+      function menuToggle() {
+        menuItems.style.maxHeight = menuItems.style.maxHeight === "0px" ? "200px" : "0px";
+      }
+
+      function productPage() {
+        return {
+          product: null,
+          mainImage: "img/default.jpg",
+          quantity: 1,
+          relatedProducts: [],
+          categoryName: "",
+          itemsByCategory: {
+            tenda: [
+              { id: 1, name: "Big Dome 6 Pro", imgs: ["img/product/tenda/2.jpg"], price: 75000, desc: "Tenda kapasitas 6 orang dengan ventilasi udara luas dan bahan tahan air. Cocok untuk camping keluarga atau kelompok besar." },
+              { id: 2, name: "Easy Dome 2", imgs: ["img/product/tenda/3.jpg"], price: 20000, desc: "Tenda ringan untuk 2 orang dengan sistem pemasangan cepat. Ideal untuk pendaki solo atau berdua." },
+              { id: 3, name: "Tenda Bespot", imgs: ["img/product/tenda/4.jpg"], price: 35000, desc: "Tenda kompak dengan desain modern dan sirkulasi udara optimal. Cocok untuk camping di cuaca panas maupun dingin." },
+              { id: 4, name: "Borneo 3", imgs: ["img/product/tenda/5.jpg"], price: 40000, desc: "Tenda 3 orang berbahan polyester anti air dengan rangka kokoh. Tahan terhadap angin dan hujan ringan." },
+              { id: 5, name: "Borneo 4", imgs: ["img/product/tenda/1.jpg"], price: 50000, desc: "Versi lebih besar dari Borneo series, muat 4 orang dengan ruang tambahan untuk peralatan camping." },
+            ],
+
+            carrier: [
+              { id: 6, name: "Daypack", imgs: ["img/product/carrier/2.jpg"], price: 10000, desc: "Tas harian berkapasitas kecil dengan banyak kompartemen. Cocok untuk perjalanan singkat atau hiking ringan." },
+              { id: 7, name: "Sunature Futura Pro", imgs: ["img/product/carrier/3.jpg"], price: 20000, desc: "Carrier ergonomis dengan ventilasi punggung dan tali bahu empuk. Nyaman untuk pendakian jarak menengah." },
+              { id: 8, name: "Deuter Futura 32", imgs: ["img/product/carrier/4.jpg"], price: 35000, desc: "Carrier premium 32L dengan sistem airflow dan desain anti lembab. Ideal untuk hiking atau traveling beberapa hari." },
+              { id: 9, name: "Osprey Kestrey 48", imgs: ["img/product/carrier/1.jpg"], price: 40000, desc: "Carrier profesional kapasitas 48L, kuat dan tahan cuaca. Dilengkapi raincover bawaan dan frame internal." },
+            ],
+
+            masak: [
+              { id: 10, name: "Kompor Kotak", imgs: ["img/product/masak/masak1.jpg"], price: 12000, desc: "Kompor portabel berbentuk kotak dengan daya api stabil. Cocok untuk memasak di area datar atau perkemahan." },
+              { id: 11, name: "Kompor Mawar", imgs: ["img/product/masak/masak2.jpg"], price: 15000, desc: "Kompor kecil berbentuk mawar dengan panas merata. Mudah dipasang dan hemat gas." },
+              { id: 12, name: "Kompor Koper", imgs: ["img/product/masak/masak3.jpg"], price: 20000, desc: "Kompor lipat praktis dalam koper logam. Aman dibawa dan disimpan, cocok untuk outdoor cooking." },
+              { id: 13, name: "Cooking Set 200", imgs: ["img/product/masak/masak4.jpg"], price: 12000, desc: "Set alat masak aluminium ringan berisi panci, tutup, dan mangkuk. Ideal untuk 1-2 orang." },
+              { id: 14, name: "Cooking Set 308", imgs: ["img/product/masak/masak5.jpg"], price: 15000, desc: "Set masak lengkap untuk 3-4 orang dengan bahan tahan panas dan mudah dicuci." },
+              { id: 15, name: "Gas Portable Refil", imgs: ["img/product/masak/masak6.jpg"], price: 8000, desc: "Tabung gas isi ulang untuk kompor portable. Praktis dan aman digunakan di luar ruangan." },
+            ],
+
+            penerangan: [
+              { id: 16, name: "HeadLamp", imgs: ["img/product/penerangan/penerangan1.jpg"], price: 8000, desc: "Lampu kepala ringan dengan cahaya putih terang. Cocok untuk pendakian malam atau kegiatan outdoor." },
+              { id: 17, name: "Headlamp Electric", imgs: ["img/product/penerangan/penerangan2.jpg"], price: 10000, desc: "Headlamp isi ulang dengan mode cahaya ganda dan daya tahan baterai lama." },
+              { id: 18, name: "Lampu Tenda", imgs: ["img/product/penerangan/penerangan3.jpg"], price: 8000, desc: "Lampu gantung serbaguna untuk tenda. Pencahayaan lembut dan hemat energi." },
+            ],
+
+            pribadi: [
+              { id: 19, name: "Sleeping Bag", imgs: ["img/product/pribadi/pribadi1.jpg"], price: 8000, desc: "Sleeping bag berbahan halus dan hangat. Nyaman digunakan di malam dingin saat camping." },
+              { id: 20, name: "Tracking Pole", imgs: ["img/product/pribadi/pribadi2.jpg"], price: 10000, desc: "Tongkat trekking dengan bahan aluminium ringan dan adjustable. Membantu stabilitas saat mendaki." },
+              { id: 21, name: "Sarung Tangan", imgs: ["img/product/pribadi/pribadi3.jpg"], price: 10000, desc: "Sarung tangan outdoor anti slip yang melindungi tangan dari dingin dan lecet." },
+              { id: 22, name: "Sepatu Tracking", imgs: ["img/product/pribadi/pribadi4.jpg"], price: 25000, desc: "Sepatu hiking dengan grip kuat dan bahan tahan air. Memberikan kenyamanan saat melewati medan berat." },
+            ],
+
+            tambahan: [
+              { id: 23, name: "Matras Spons", imgs: ["img/product/tambahan/tambahan1.jpg"], price: 5000, desc: "Matras busa tipis untuk alas tidur di tenda. Nyaman dan mudah digulung." },
+              { id: 24, name: "Matras Lipat Spons", imgs: ["img/product/tambahan/tambahan2.jpg"], price: 10000, desc: "Matras lipat praktis untuk camping atau piknik. Ringan dan mudah dibawa." },
+              { id: 25, name: "Flysheet", imgs: ["img/product/tambahan/tambahan3.jpg"], price: 15000, desc: "Kain pelindung tahan air yang bisa digunakan untuk menambah atap atau pelindung hujan." },
+              { id: 26, name: "Meja & Kursi Lipat", imgs: ["img/product/tambahan/tambahan4.jpg"], price: 15000, desc: "Set meja dan kursi lipat untuk kenyamanan saat makan atau bersantai di alam." },
+            ],
+          },
+
+          init() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get("id"));
+            if (!id) return;
+
+            for (let cat in this.itemsByCategory) {
+              const prod = this.itemsByCategory[cat].find((p) => p.id === id);
+              if (prod) {
+                this.product = prod;
+                this.mainImage = prod.imgs && prod.imgs.length > 0 ? prod.imgs[0] : "img/default.jpg";
+                this.categoryName = cat.charAt(0).toUpperCase() + cat.slice(1);
+                this.relatedProducts = this.itemsByCategory[cat]
+                  .filter((p) => p.id !== id)
+                  .slice(0, 4)
+                  .map((p) => ({ ...p, imgs: p.imgs && p.imgs.length > 0 ? p.imgs : ["img/default.jpg"] }));
+                break;
+              }
+            }
+          },
+          addToCart(item, qty = 1) {
+            if (Alpine.store("cart")) {
+              Alpine.store("cart").add({ ...item, quantity: qty });
+              Swal.fire("Success", "Product added to cart", "success");
+            }
+          },
+          rupiah(val) {
+            return "Rp " + val.toLocaleString("id-ID");
+          },
+        };
+      }
+    </script>
+  </body>
+</html>
