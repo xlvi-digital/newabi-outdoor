@@ -151,7 +151,7 @@
             <input type="text" x-model="customer.name" placeholder="Nama kamu" required />
 
             <label>No HP (WhatsApp)</label>
-            <input type="text" x-model="customer.phone" placeholder="08xxxx" required />
+            <input type="number" min="11" x-model="customer.phone" placeholder="08xxxx" required />
 
             <label>Kartu Identitas</label>
             <select x-model="customer.identity">

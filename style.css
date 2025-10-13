@@ -324,6 +324,7 @@ small {
   width: 50px;
   margin-top: 20px;
   border-radius: 50%;
+  border: 1px solid var(--main-color);
 }
 
 .testimonial .col-3:hover {

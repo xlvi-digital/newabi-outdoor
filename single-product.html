@@ -119,24 +119,26 @@
     </div>
 
     <!-- Related Products -->
-    <div class="small-container">
-      <div class="row row-2">
-        <h2>Related Product</h2>
-        <p>View More</p>
+    <section id="product" class="product">
+      <div class="small-container">
+        <div class="row row-2">
+          <h2>Related Product</h2>
+          <p>View More</p>
+        </div>
+        <div class="row">
+          <template x-for="item in relatedProducts" :key="item.id">
+            <div class="col-4">
+              <a :href="`single-product.html?id=${item.id}`">
+                <img :src="item.imgs && item.imgs.length > 0 ? item.imgs[0] : 'img/default.jpg'" alt="Product Image" class="product-img" />
+              </a>
+              <h4 x-text="item.name"></h4>
+              <p x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
+              <a href="#" @click.prevent="$store.cart.add({...item, quantity: 1})" class="btn">Add to Cart</a>
+            </div>
+          </template>
+        </div>
       </div>
-      <div class="row">
-        <template x-for="item in relatedProducts" :key="item.id">
-          <div class="col-4">
-            <a :href="`single-product.html?id=${item.id}`">
-              <img :src="item.imgs && item.imgs.length > 0 ? item.imgs[0] : 'img/default.jpg'" alt="Product Image" class="product-img" />
-            </a>
-            <h4 x-text="item.name"></h4>
-            <p x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
-            <a href="#" @click.prevent="$store.cart.add({...item, quantity: 1})" class="btn">Add to Cart</a>
-          </div>
-        </template>
-      </div>
-    </div>
+    </section>
 
     <!-- Footer -->
     <div class="footer">
