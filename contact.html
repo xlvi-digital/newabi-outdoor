@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" x-data>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="images/logo (1).png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="responsive.css" />
+    <title>Newabi Outdoor | Contact</title>
+    <style>
+      .contact-container {
+        max-width: 1000px;
+        margin: 50px auto;
+        padding: 40px;
+        border-radius: 15px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        font-family: "Poppins", sans-serif;
+      }
+
+      .contact-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .contact-header h2 {
+        font-weight: 700;
+        font-size: 28px;
+        color: #222;
+      }
+
+      .contact-header p {
+        color: #555;
+      }
+
+      .social-links {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .social-links a {
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #006633;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+
+      .social-links a:hover {
+        color: #00994c;
+      }
+
+      .map-section {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .map-section iframe {
+        width: 100%;
+        height: 350px;
+        border: 0;
+        border-radius: 10px;
+      }
+
+      .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        transition: border 0.3s;
+      }
+
+      .contact-form input:focus,
+      .contact-form textarea:focus {
+        border-color: #00994c;
+      }
+
+      .contact-form button {
+        background: #00994c;
+        color: #fff;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .contact-form button:hover {
+        background: #007a3d;
+      }
+
+      .footer {
+        margin-top: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="container">
+      <div class="navbar">
+        <div class="logo">
+          <img src="img/logo/newabi-logo.png" width="125px" />
+        </div>
+        <nav>
+          <ul id="menuItems">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Product</a></li>
+            <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+          </ul>
+        </nav>
+        <img src="images/menu.png" class="menu-icon" onclick="menuToggle()" />
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-container">
+      <div class="contact-header">
+        <h2>Hubungi Kami</h2>
+        <p>Butuh bantuan atau ingin bertanya seputar rental alat camping? Kami siap membantu!</p>
+      </div>
+
+      <div class="social-links">
+        <a href="https://www.instagram.com/newabi.outdoor" target="_blank"><i class="bx bxl-instagram"></i> Instagram</a>
+        <a href="https://www.tiktok.com/@newabi.outdoor" target="_blank"><i class="bx bxl-tiktok"></i> TikTok</a>
+        <a href="https://wa.me/6281234567890" target="_blank"><i class="bx bxl-whatsapp"></i> WhatsApp</a>
+      </div>
+
+      <div class="map-section">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.787898390074!2d107.15164757388557!3d-6.795641766459965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68538448ebb9fd%3A0xffec4c4806aab5f!2sNewabi%20Outdoor!5e0!3m2!1sid!2sid!4v1760343860913!5m2!1sid!2sid"
+          width="600"
+          height="450"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="name" placeholder="Nama Lengkap" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="text" id="subject" placeholder="Subjek Pesan" required />
+        <textarea id="message" rows="5" placeholder="Tulis pesan kamu di sini..." required></textarea>
+        <button type="submit">Kirim Pesan</button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col-1">
+            <h3>Tentang Kami</h3>
+            <p>Newabi Outdoor adalah penyedia jasa rental alat camping & adventure gear terpercaya sejak 2024.</p>
+          </div>
+          <div class="footer-col-2">
+            <img src="img/logo/newabi-logo.png" alt="Newabi Outdoor" />
+            <p>Petualangan dimulai dari sini.</p>
+          </div>
+          <div class="footer-col-3">
+            <h3>Ikuti Kami</h3>
+            <ul>
+              <li>Instagram</li>
+              <li>TikTok</li>
+              <li>WhatsApp</li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <p class="copyright">© 2024 Newabi Outdoor — Sewa Alat Camping Lengkap untuk Setiap Petualangan</p>
+      </div>
+    </div>
+
+    <script>
+      function menuToggle() {
+        const menu = document.getElementById("menuItems");
+        menu.style.maxHeight = menu.style.maxHeight == "0px" ? "200px" : "0px";
+      }
+
+      // Simulasi kirim pesan ke WhatsApp
+      document.getElementById("contactForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const subject = document.getElementById("subject").value;
+        const message = document.getElementById("message").value;
+
+        const text = `Halo Newabi Outdoor,%0A%0ASaya ${name}%0AEmail: ${email}%0ASubjek: ${subject}%0APesan: ${message}`;
+        window.open(`https://wa.me/6281234567890?text=${text}`, "_blank");
+      });
+    </script>
+  </body>
+</html>

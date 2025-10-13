@@ -2,7 +2,8 @@
 <html lang="en" x-data="productPage()">
   <head>
     <meta charset="UTF-8" />
-    <link rel="shortcut icon" href="images/logo (1).png" />
+    <link rel="shortcut icon" href="img/logo/logo-newabi.png" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/sweetalert2/sweetalert2.min.css" />
@@ -10,7 +11,7 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="responsive.css" />
 
-    <title>VansLegacy | Single Product</title>
+    <title>NEWABIOUTDOOR | Single Product</title>
 
     <script>
       document.addEventListener("alpine:init", () => {
@@ -52,17 +53,16 @@
   <body>
     <!-- Navbar -->
     <div class="container">
-      <div class="navbar">
+      <div class="navbar" x-data="cartBadge()">
         <div class="logo">
-          <img src="img/logo/newabi-logo.png" width="125px" />
+          <a href="index.html"> <img src="img/logo/newabi-logo.png" width="125px" /></a>
         </div>
         <nav>
           <ul id="menuItems">
             <li><a href="index.html">Home</a></li>
             <li><a href="products.html">Product</a></li>
             <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
-            <li><a href="">Contact</a></li>
-            <li><a href="">Account</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </nav>
         <div
@@ -139,7 +139,7 @@
     </div>
 
     <!-- Footer -->
-  <div class="footer">
+    <div class="footer">
       <div class="container">
         <div class="row">
           <div class="footer-col-1">

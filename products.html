@@ -2,7 +2,8 @@
 <html lang="en" x-data="productPage()">
   <head>
     <meta charset="UTF-8" />
-    <link rel="shortcut icon" href="images/logo (1).png" />
+    <link rel="shortcut icon" href="img/logo/logo-newabi.png" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
@@ -40,22 +41,21 @@
       });
     </script>
 
-    <title>VansLegacy | All Product</title>
+    <title>NEWABIOUTDOOR | All Product</title>
   </head>
   <body>
     <!-- Navbar -->
     <div class="container">
-      <div class="navbar">
+      <div class="navbar" x-data="cartBadge()">
         <div class="logo">
-          <img src="img/logo/newabi-logo.png" width="125px" />
+          <a href="index.html"> <img src="img/logo/newabi-logo.png" width="125px" /></a>
         </div>
         <nav>
           <ul id="menuItems">
             <li><a href="index.html">Home</a></li>
             <li><a href="products.html">Product</a></li>
             <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
-            <li><a href="">Contact</a></li>
-            <li><a href="">Account</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </nav>
 
@@ -80,7 +80,7 @@
     </div>
 
     <!-- All Products -->
-    <div class="small-container pt-5" x-data="allProducts()">
+    <div class="small-container" x-data="allProducts()">
       <div class="row row-2">
         <h2>All Products</h2>
         <input type="search" placeholder="Cari produk..." class="search-box" x-model="searchQuery" />
@@ -100,7 +100,7 @@
         <template x-for="item in filteredItems" :key="item.id">
           <div class="col-4">
             <a :href="`single-product.html?id=${item.id}`">
-              <img :src="item.img" :alt="item.name" class="product-img" />
+              <img :src="item.imgs" :alt="item.name" class="product-img" />
             </a>
             <h4 x-text="item.name"></h4>
             <p x-text="'Rp ' + item.price.toLocaleString('id-ID') + ' / Hari'"></p>
@@ -180,42 +180,42 @@
           currentCategory: "all",
           itemsByCategory: {
             tenda: [
-              { id: 1, name: "Big Dome 6 Pro", img: "img/product/tenda/2.jpg", price: 75000 },
-              { id: 2, name: "Easy Dome 2", img: "img/product/tenda/3.jpg", price: 20000 },
-              { id: 3, name: "Bespot", img: "img/product/tenda/4.jpg", price: 35000 },
-              { id: 4, name: "Borneo 3", img: "img/product/tenda/5.jpg", price: 40000 },
-              { id: 5, name: "Borneo 4", img: "img/product/tenda/1.jpg", price: 50000 },
+              { id: 1, name: "Big Dome 6 Pro", imgs: "img/product/tenda/2.jpg", price: 75000 },
+              { id: 2, name: "Easy Dome 2", imgs: "img/product/tenda/3.jpg", price: 20000 },
+              { id: 3, name: "Bespot", imgs: "img/product/tenda/4.jpg", price: 35000 },
+              { id: 4, name: "Borneo 3", imgs: "img/product/tenda/5.jpg", price: 40000 },
+              { id: 5, name: "Borneo 4", imgs: "img/product/tenda/1.jpg", price: 50000 },
             ],
             carrier: [
-              { id: 6, name: "Daypack", img: "img/product/carrier/2.jpg", price: 10000 },
-              { id: 7, name: "Sunature Futura Pro", img: "img/product/carrier/3.jpg", price: 20000 },
-              { id: 8, name: "Deuter Futura 32", img: "img/product/carrier/4.jpg", price: 35000 },
-              { id: 9, name: "Osprey Kestrey 48", img: "img/product/carrier/1.jpg", price: 40000 },
+              { id: 6, name: "Daypack", imgs: "img/product/carrier/2.jpg", price: 10000 },
+              { id: 7, name: "Sunature Futura Pro", imgs: "img/product/carrier/3.jpg", price: 20000 },
+              { id: 8, name: "Deuter Futura 32", imgs: "img/product/carrier/4.jpg", price: 35000 },
+              { id: 9, name: "Osprey Kestrey 48", imgs: "img/product/carrier/1.jpg", price: 40000 },
             ],
             masak: [
-              { id: 10, name: "Kompor Kotak", img: "img/product/masak/masak1.jpg", price: 12000 },
-              { id: 11, name: "Kompor Mawar", img: "img/product/masak/masak2.jpg", price: 15000 },
-              { id: 12, name: "Kompor Koper", img: "img/product/masak/masak3.jpg", price: 20000 },
-              { id: 13, name: "Cooking Seet 200", img: "img/product/masak/masak4.jpg", price: 12000 },
-              { id: 14, name: "Cooking Seet 308", img: "img/product/masak/masak5.jpg", price: 15000 },
-              { id: 15, name: "Gas Portable Refil", img: "img/product/masak/masak6.jpg", price: 8000 },
+              { id: 10, name: "Kompor Kotak", imgs: "img/product/masak/masak1.jpg", price: 12000 },
+              { id: 11, name: "Kompor Mawar", imgs: "img/product/masak/masak2.jpg", price: 15000 },
+              { id: 12, name: "Kompor Koper", imgs: "img/product/masak/masak3.jpg", price: 20000 },
+              { id: 13, name: "Cooking Seet 200", imgs: "img/product/masak/masak4.jpg", price: 12000 },
+              { id: 14, name: "Cooking Seet 308", imgs: "img/product/masak/masak5.jpg", price: 15000 },
+              { id: 15, name: "Gas Portable Refil", imgs: "img/product/masak/masak6.jpg", price: 8000 },
             ],
             penerangan: [
-              { id: 16, name: "HeadLamp", img: "img/product/penerangan/penerangan1.jpg", price: 8000 },
-              { id: 17, name: "Headlamp Electric", img: "img/product/penerangan/penerangan2.jpg", price: 10000 },
-              { id: 18, name: "Lampu Tenda", img: "img/product/penerangan/penerangan3.jpg", price: 8000 },
+              { id: 16, name: "HeadLamp", imgs: "img/product/penerangan/penerangan1.jpg", price: 8000 },
+              { id: 17, name: "Headlamp Electric", imgs: "img/product/penerangan/penerangan2.jpg", price: 10000 },
+              { id: 18, name: "Lampu Tenda", imgs: "img/product/penerangan/penerangan3.jpg", price: 8000 },
             ],
             pribadi: [
-              { id: 19, name: "Sleping Bag", img: "img/product/pribadi/pribadi1.jpg", price: 8000 },
-              { id: 20, name: "Tracking Pole", img: "img/product/pribadi/pribadi2.jpg", price: 10000 },
-              { id: 21, name: "Sarung Tangan", img: "img/product/pribadi/pribadi3.jpg", price: 10000 },
-              { id: 22, name: "Sepatu Tracking", img: "img/product/pribadi/pribadi4.jpg", price: 25000 },
+              { id: 19, name: "Sleping Bag", imgs: "img/product/pribadi/pribadi1.jpg", price: 8000 },
+              { id: 20, name: "Tracking Pole", imgs: "img/product/pribadi/pribadi2.jpg", price: 10000 },
+              { id: 21, name: "Sarung Tangan", imgs: "img/product/pribadi/pribadi3.jpg", price: 10000 },
+              { id: 22, name: "Sepatu Tracking", imgs: "img/product/pribadi/pribadi4.jpg", price: 25000 },
             ],
             tambahan: [
-              { id: 23, name: "Matras Spons", img: "img/product/tambahan/tambahan1.jpg", price: 5000 },
-              { id: 24, name: "Matras Lipat Spons", img: "img/product/tambahan/tambahan2.jpg", price: 10000 },
-              { id: 25, name: "Flysheet", img: "img/product/tambahan/tambahan3.jpg", price: 15000 },
-              { id: 26, name: "Meja & Kursi Lipat", img: "img/product/tambahan/tambahan4.jpg", price: 15000 },
+              { id: 23, name: "Matras Spons", imgs: "img/product/tambahan/tambahan1.jpg", price: 5000 },
+              { id: 24, name: "Matras Lipat Spons", imgs: "img/product/tambahan/tambahan2.jpg", price: 10000 },
+              { id: 25, name: "Flysheet", imgs: "img/product/tambahan/tambahan3.jpg", price: 15000 },
+              { id: 26, name: "Meja & Kursi Lipat", imgs: "img/product/tambahan/tambahan4.jpg", price: 15000 },
             ],
           },
           get filteredItems() {

@@ -2,29 +2,101 @@
 <html lang="en" x-data>
   <head>
     <meta charset="UTF-8" />
-    <link rel="shortcut icon" href="images/logo (1).png" />
+    <link rel="shortcut icon" href="img/logo/logo-newabi.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/sweetalert2/sweetalert2.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="responsive.css" />
-    <title>VansLegacy | CheckOut</title>
+    <title>NEWABIOUTDOOR | Checkout</title>
+
+    <style>
+      /* ===== FORM STYLING ===== */
+      .checkout-form {
+        background: #f7f7f7;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        margin-top: 40px;
+      }
+
+      .checkout-form h3 {
+        margin-bottom: 15px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      .checkout-form label {
+        display: block;
+        margin-top: 12px;
+        margin-bottom: 4px;
+        font-size: 15px;
+        color: #444;
+      }
+
+      .checkout-form input[type="text"],
+      .checkout-form input[type="number"],
+      .checkout-form input[type="date"],
+      .checkout-form select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+
+      .checkout-form input:focus,
+      .checkout-form select:focus {
+        border-color: #009879;
+        box-shadow: 0 0 5px rgba(0, 152, 121, 0.4);
+      }
+
+      .checkout-form input[type="checkbox"] {
+        margin-right: 8px;
+        transform: scale(1.2);
+      }
+
+      .checkout-form small {
+        color: #666;
+        display: block;
+        margin-top: 5px;
+      }
+
+      .total-price {
+        margin-top: 30px;
+      }
+
+      .btn {
+        background: #009879;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: 0.3s;
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background: #00775e;
+      }
+    </style>
   </head>
+
   <body>
     <!-- Navbar -->
     <div class="container">
       <div class="navbar">
         <div class="logo">
-          <img src="img/logo/newabi-logo.png" width="125px" />
+          <a href="index.html"> <img src="img/logo/newabi-logo.png" width="125px" /></a>
         </div>
         <nav>
           <ul id="menuItems">
             <li><a href="index.html">Home</a></li>
             <li><a href="products.html">Product</a></li>
             <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
-            <li><a href="">Contact</a></li>
-            <li><a href="">Account</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </nav>
         <div class="cart-icon" x-data="cartPage()">
@@ -46,6 +118,7 @@
               <tr>
                 <th>Product</th>
                 <th>Quantity</th>
+                <th>Durasi (Hari)</th>
                 <th>Sub Total</th>
               </tr>
             </thead>
@@ -54,22 +127,53 @@
                 <tr>
                   <td>
                     <div class="cart-info">
-                      <img :src="item.img" alt="" />
+                      <img :src="item.imgs" alt="" />
                       <div>
                         <p x-text="item.name"></p>
-                        <small>Price: <span x-text="rupiah(item.price)"></span></small><br />
+                        <small>Harga: <span x-text="rupiah(item.price)"></span></small><br />
                         <a href="#" @click.prevent="removeFromCart(item.id)">Remove</a>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <input type="number" min="1" :value="item.quantity" @input="updateQty(item.id, parseInt($event.target.value))" />
-                  </td>
-                  <td><span x-text="rupiah(item.price * item.quantity)"></span></td>
+                  <td><input type="number" min="1" :value="item.quantity" @input="updateQty(item.id, parseInt($event.target.value))" /></td>
+                  <td><input type="number" min="1" :value="item.duration || 1" @input="updateDuration(item.id, parseInt($event.target.value))" /></td>
+                  <td><span x-text="rupiah(item.price * item.quantity * (item.duration || 1))"></span></td>
                 </tr>
               </template>
             </tbody>
           </table>
+
+          <!-- FORM USER -->
+          <div class="checkout-form">
+            <h3>Data Penyewa</h3>
+
+            <label>Nama Lengkap</label>
+            <input type="text" x-model="customer.name" placeholder="Nama kamu" required />
+
+            <label>No HP (WhatsApp)</label>
+            <input type="text" x-model="customer.phone" placeholder="08xxxx" required />
+
+            <label>Kartu Identitas</label>
+            <select x-model="customer.identity">
+              <option value="">Pilih Identitas</option>
+              <option value="KTP">KTP</option>
+              <option value="SIM">SIM</option>
+              <option value="Kartu Pelajar">Kartu Pelajar</option>
+            </select>
+
+            <label>Tanggal Booking</label>
+            <input type="date" x-model="customer.date" />
+
+            <label> <input type="checkbox" x-model="useDelivery" /> Gunakan Layanan Antar (Rp 5.000/km) </label>
+
+            <template x-if="useDelivery">
+              <div>
+                <label>Alamat Lengkap / Titik Google Maps</label>
+                <input type="text" x-model="deliveryAddress" placeholder="Masukkan alamat atau link Google Maps" />
+                <small>*Biaya ongkir akan dikonfirmasi melalui WhatsApp (Rp 5.000/km)*</small>
+              </div>
+            </template>
+          </div>
 
           <div class="total-price">
             <table>
@@ -78,8 +182,8 @@
                 <td><span x-text="rupiah(calculateSubTotal())"></span></td>
               </tr>
               <tr>
-                <td>Tax (10%)</td>
-                <td><span x-text="rupiah(calculateTax())"></span></td>
+                <td>Ongkir</td>
+                <td><span x-text="useDelivery ? 'Akan dikonfirmasi via WhatsApp' : 'Rp 0'"></span></td>
               </tr>
               <tr>
                 <td>Total</td>
@@ -88,7 +192,7 @@
               <tr>
                 <td></td>
                 <td>
-                  <a href="#" @click.prevent="checkout()" class="btn"><i class="bx bx-cart"></i> Check Out</a>
+                  <a href="#" @click.prevent="checkout()" class="btn"><i class="bx bx-cart"></i> Kirim via WhatsApp</a>
                 </td>
               </tr>
             </table>
@@ -126,22 +230,22 @@
         <p class="copyright">© 2024 Newabi Outdoor — Sewa Alat Camping Lengkap untuk Setiap Petualangan</p>
       </div>
     </div>
-    <script src="script.js"></script>
-    <script src="assets/jquery.js"></script>
-    <script src="assets/app.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="assets/sweetalert2/sweetalert2.min.js"></script>
 
     <script>
-      var menuItems = document.getElementById("menuItems");
-      menuItems.style.maxHeight = "0px";
       function menuToggle() {
+        const menuItems = document.getElementById("menuItems");
         menuItems.style.maxHeight = menuItems.style.maxHeight == "0px" ? "200px" : "0px";
       }
 
       function cartPage() {
         return {
           cart: JSON.parse(localStorage.getItem("cartItems") || "[]"),
+          useDelivery: false,
+          deliveryAddress: "",
+          customer: { name: "", phone: "", identity: "", date: "" },
 
           get cartCount() {
             return this.cart.reduce((acc, p) => acc + p.quantity, 0);
@@ -158,12 +262,16 @@
           updateQty(id, qty) {
             const item = this.cart.find((p) => p.id === id);
             if (!item) return;
-            if (qty < 1) {
-              this.removeFromCart(id);
-            } else {
-              item.quantity = qty;
-            }
+            item.quantity = qty > 0 ? qty : 1;
             this.saveCart();
+          },
+
+          updateDuration(id, days) {
+            const item = this.cart.find((p) => p.id === id);
+            if (item) {
+              item.duration = days > 0 ? days : 1;
+              this.saveCart();
+            }
           },
 
           removeFromCart(id) {
@@ -172,19 +280,51 @@
           },
 
           calculateSubTotal() {
-            return this.cart.reduce((acc, p) => acc + p.price * p.quantity, 0);
-          },
-
-          calculateTax() {
-            return this.calculateSubTotal() * 0.1; // contoh 10% tax
+            return this.cart.reduce((acc, p) => acc + p.price * p.quantity * (p.duration || 1), 0);
           },
 
           calculateTotal() {
-            return this.calculateSubTotal() + this.calculateTax();
+            return this.calculateSubTotal();
+          },
+
+          formatMessage() {
+            const itemsText = this.cart.map((item) => `${item.name} (${item.quantity}x) - ${item.duration || 1} hari = ${this.rupiah(item.price * item.quantity * (item.duration || 1))}`).join("\n");
+
+            const deliveryText = this.useDelivery ? `Gunakan layanan antar\nAlamat: ${this.deliveryAddress}\n\n*Biaya ongkir Rp 5.000/km akan dikonfirmasi melalui WhatsApp*` : "Tanpa layanan antar (ambil di lokasi)";
+
+            return `📅 *Tanggal Booking:* ${this.customer.date}
+👤 *Nama:* ${this.customer.name}
+📞 *No HP:* ${this.customer.phone}
+🪪 *Identitas:* ${this.customer.identity}
+
+🛒 *Data Pesanan:*
+${itemsText}
+
+${deliveryText}
+
+💰 *Total Pembayaran:* ${this.rupiah(this.calculateTotal())}
+
+_Terhitung 1 hari sewa setiap pengambilan barang dari jam 15.00 WIB._
+Salam hangat,
+Admin Newabi Outdoor.`;
           },
 
           checkout() {
-            Swal.fire("Success", "Checkout berhasil!", "success");
+            if (!this.customer.name || !this.customer.phone || !this.customer.identity || !this.customer.date) {
+              Swal.fire("Peringatan", "Lengkapi semua data penyewa terlebih dahulu!", "warning");
+              return;
+            }
+
+            if (this.useDelivery && !this.deliveryAddress) {
+              Swal.fire("Peringatan", "Masukkan alamat lengkap atau link Google Maps untuk layanan antar!", "warning");
+              return;
+            }
+
+            const message = encodeURIComponent(this.formatMessage());
+            const phoneAdmin = "6281313362467"; // Nomor admin WA
+            const waLink = `https://wa.me/${phoneAdmin}?text=${message}`;
+            window.open(waLink, "_blank");
+
             this.cart = [];
             this.saveCart();
           },
