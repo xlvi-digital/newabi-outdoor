@@ -87,7 +87,7 @@
       </div>
 
       <!-- Filter Kategori -->
-      <div class="row mb-3">
+      <div class="row" style="margin-bottom: 20px">
         <button @click="currentCategory='all'" :class="{'link-btn': true, 'active': currentCategory==='all'}">All</button>
 
         <template x-for="cat in Object.keys(itemsByCategory)" :key="cat">
@@ -96,18 +96,20 @@
       </div>
 
       <!-- Produk -->
-      <div class="row">
-        <template x-for="item in filteredItems" :key="item.id">
-          <div class="col-4">
-            <a :href="`single-product.html?id=${item.id}`">
-              <img :src="item.imgs" :alt="item.name" class="product-img" />
-            </a>
-            <h4 x-text="item.name"></h4>
-            <p x-text="'Rp ' + item.price.toLocaleString('id-ID') + ' / Hari'"></p>
-            <a @click.prevent="addToCart(item,1)" class="btn" style="font-size: 0.8rem; margin-top: 15px">Add to Cart</a>
-          </div>
-        </template>
-      </div>
+      <section id="product" class="product">
+        <div class="row">
+          <template x-for="item in filteredItems" :key="item.id">
+            <div class="col-4">
+              <a :href="`single-product.html?id=${item.id}`">
+                <img :src="item.imgs" :alt="item.name" class="product-img" />
+              </a>
+              <h4 x-text="item.name"></h4>
+              <p x-text="'Rp ' + item.price.toLocaleString('id-ID') + ' / Hari'"></p>
+              <a @click.prevent="addToCart(item,1)" class="btn" style="font-size: 0.8rem; margin-top: 15px">Add to Cart</a>
+            </div>
+          </template>
+        </div>
+      </section>
     </div>
 
     <div class="footer">
