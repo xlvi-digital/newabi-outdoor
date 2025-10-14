@@ -81,6 +81,37 @@
       .btn:hover {
         background: #00775e;
       }
+
+      .qty-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .qty-control input {
+        width: 20px;
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 12px;
+      }
+
+      .qty-control button {
+        background-color: #009879;
+        color: #fff;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s ease;
+      }
+
+      .qty-control button:hover {
+        background-color: #00775e;
+      }
     </style>
   </head>
 
@@ -111,6 +142,10 @@
 
     <!-- Cart Items -->
     <div class="small-container cart-items" x-data="cartPage()">
+      <div class="row row-2">
+        <h2>Keranjang Anda</h2>
+        <a href="products.html" class="btn">Tambah Product</a>
+      </div>
       <template x-if="cart.length > 0">
         <div>
           <table>
@@ -135,8 +170,22 @@
                       </div>
                     </div>
                   </td>
-                  <td><input type="number" min="1" :value="item.quantity" @input="updateQty(item.id, parseInt($event.target.value))" /></td>
-                  <td><input type="number" min="1" :value="item.duration || 1" @input="updateDuration(item.id, parseInt($event.target.value))" /></td>
+                  <td>
+                    <div class="qty-control">
+                      <button @click="decreaseQty(item.id)">−</button>
+                      <input type="text" min="1" :value="item.quantity" @input="updateQty(item.id, parseInt($event.target.value))" />
+                      <button @click="increaseQty(item.id)">+</button>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="qty-control">
+                      <button @click="decreaseDuration(item.id)">−</button>
+                      <input type="text" min="1" :value="item.duration || 1" @input="updateDuration(item.id, parseInt($event.target.value))" />
+                      <button @click="increaseDuration(item.id)">+</button>
+                    </div>
+                  </td>
+
                   <td><span x-text="rupiah(item.price * item.quantity * (item.duration || 1))"></span></td>
                 </tr>
               </template>
@@ -264,6 +313,37 @@
             if (!item) return;
             item.quantity = qty > 0 ? qty : 1;
             this.saveCart();
+          },
+          increaseQty(id) {
+            const item = this.cart.find((p) => p.id === id);
+            if (item) {
+              item.quantity++;
+              this.saveCart();
+            }
+          },
+
+          decreaseQty(id) {
+            const item = this.cart.find((p) => p.id === id);
+            if (item && item.quantity > 1) {
+              item.quantity--;
+              this.saveCart();
+            }
+          },
+
+          increaseDuration(id) {
+            const item = this.cart.find((p) => p.id === id);
+            if (item) {
+              item.duration = (item.duration || 1) + 1;
+              this.saveCart();
+            }
+          },
+
+          decreaseDuration(id) {
+            const item = this.cart.find((p) => p.id === id);
+            if (item && item.duration > 1) {
+              item.duration--;
+              this.saveCart();
+            }
           },
 
           updateDuration(id, days) {
