@@ -427,15 +427,16 @@ small {
   padding: 0;
 }
 
-.footer-col-3 ul li {
+.footer-col-3 ul li a {
   color: #ccc;
   margin-bottom: 8px;
   cursor: pointer;
   transition: color 0.3s;
 }
 
-.footer-col-3 ul li:hover {
+.footer-col-3 ul li a:hover {
   color: var(--main-color);
+  text-decoration: solid;
 }
 
 /* ===== Footer Divider & Copyright ===== */
@@ -630,7 +631,7 @@ td input {
 }
 
 td a {
-  color: var(--main-color);
+  color: red;
   font-size: 12px;
 }
 

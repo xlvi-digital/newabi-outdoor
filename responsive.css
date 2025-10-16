@@ -25,7 +25,10 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .header h1 {
+  .row {
+    justify-content: center;
+  }
+  .col-2 h1 {
     font-size: 3rem;
     /* line-height: 2rem; */
   }

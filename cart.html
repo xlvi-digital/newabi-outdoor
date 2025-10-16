@@ -196,7 +196,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="products.html">Product</a></li>
             <li><a href="https://masreyxlvi.github.io/newabioutdoor/" target="_blank">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.html">Q&A</a></li>
           </ul>
         </nav>
         <div class="cart-icon" x-data="cartPage()">
@@ -344,9 +344,9 @@
           <div class="footer-col-3">
             <h3>Ikuti Kami</h3>
             <ul>
-              <li>Instagram</li>
-              <li>TikTok</li>
-              <li>WhatsApp</li>
+              <li><a href="https://www.instagram.com/newabioutdoor/" target="_blank">Instagram</a></li>
+              <li><a href="https://www.tiktok.com/@newabi.outdoor" target="_blank">TikTok</a></li>
+              <li><a href="https://wa.me/6285759509018" target="_blank">WhatsApp</a></li>
             </ul>
           </div>
         </div>
@@ -361,8 +361,20 @@
     <script>
       function menuToggle() {
         const menuItems = document.getElementById("menuItems");
-        menuItems.style.maxHeight = menuItems.style.maxHeight == "0px" ? "200px" : "0px";
+        if (menuItems.style.maxHeight === "0px" || menuItems.style.maxHeight === "") {
+          menuItems.style.maxHeight = "200px"; // buka menu
+        } else {
+          menuItems.style.maxHeight = "0px"; // tutup menu
+        }
       }
+
+      // Pastikan navbar tertutup saat pertama kali load
+      document.addEventListener("DOMContentLoaded", () => {
+        const menuItems = document.getElementById("menuItems");
+        if (window.innerWidth < 768) {
+          menuItems.style.maxHeight = "0px";
+        }
+      });
 
       function cartPage() {
         return {
@@ -431,6 +443,8 @@
 
           removeFromCart(id) {
             this.cart = this.cart.filter((p) => p.id !== id);
+            Swal.fire("success", "Pesanan Berhasil Di Cancel", "success");
+            return;
             this.saveCart();
           },
 
@@ -477,7 +491,7 @@ Admin Newabi Outdoor.`;
             }
 
             const message = encodeURIComponent(this.formatMessage());
-            const phoneAdmin = "6281313362467"; // Nomor admin WA
+            const phoneAdmin = "6287728025262"; // Nomor admin WA
             const waLink = `https://wa.me/${phoneAdmin}?text=${message}`;
             window.open(waLink, "_blank");
 
