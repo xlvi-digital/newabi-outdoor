@@ -123,7 +123,7 @@
       <div class="small-container">
         <div class="row row-2">
           <h2>Related Product</h2>
-          <p>View More</p>
+          <p><a href="products.html">View More</a></p>
         </div>
         <div class="row">
           <template x-for="item in relatedProducts" :key="item.id">
@@ -133,7 +133,7 @@
               </a>
               <h4 x-text="item.name"></h4>
               <p x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
-              <a href="#" @click.prevent="$store.cart.add({...item, quantity: 1})" class="btn">Add to Cart</a>
+              <a href="#" @click.prevent="$store.cart.add({...item, quantity: 1})" class="btn" style="font-size: 0.8rem; margin-top: 15px">Add to Cart</a>
             </div>
           </template>
         </div>
@@ -194,7 +194,7 @@
               { id: 2, name: "Easy Dome 2", imgs: ["img/product/tenda/3.jpg"], price: 20000, desc: "Tenda ringan untuk 2 orang, mudah dipasang dan dibongkar, ideal untuk pendaki solo atau pasangan camper." },
               { id: 3, name: "Bespot", imgs: ["img/product/tenda/4.jpg"], price: 35000, desc: "Tenda ringkas dengan sistem tiang fleksibel dan perlindungan UV, cocok untuk perjalanan singkat dan camping ringan." },
               { id: 4, name: "Borneo 3", imgs: ["img/product/tenda/5.jpg"], price: 40000, desc: "Tenda 3 orang dengan rangka kuat dan lapisan anti-air, memberikan kenyamanan tidur di segala cuaca." },
-              { id: 5, name: "Borneo 4 Black Reg", imgs: ["img/product/tenda/8.jpg"], price: 50000, desc: "Tenda 4 orang berdesain modern dengan warna hitam elegan, kuat menghadapi angin dan hujan deras." },
+              { id: 5, name: "Borneo 4 Black Red", imgs: ["img/product/tenda/8.jpg"], price: 50000, desc: "Tenda 4 orang berdesain modern dengan warna hitam elegan, kuat menghadapi angin dan hujan deras." },
               { id: 6, name: "Quechua Arpenaz 2", imgs: ["img/product/tenda/6.jpg"], price: 30000, desc: "Tenda kompak untuk 2 orang dengan sirkulasi udara baik dan daya tahan terhadap cuaca ekstrem." },
               { id: 7, name: "Great Outdoor Java 4", imgs: ["img/product/tenda/7.jpg"], price: 40000, desc: "Tenda keluarga 4 orang dengan desain kubah luas dan bahan tahan air, cocok untuk camping di alam terbuka." },
               { id: 8, name: "Borneo 4 Black Yellow", imgs: ["img/product/tenda/9.jpg"], price: 50000, desc: "Versi stylish dari seri Borneo dengan kombinasi warna hitam dan kuning, tahan air dan mudah dipasang." },
