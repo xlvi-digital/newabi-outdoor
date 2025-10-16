@@ -112,6 +112,75 @@
       .qty-control button:hover {
         background-color: #00775e;
       }
+
+      .name {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
+        }
+
+        thead {
+          display: none;
+        }
+
+        tr {
+          margin-bottom: 20px;
+          background: #fff;
+          border-radius: 10px;
+          /* padding: 15px; */
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        td {
+          border: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        td:before {
+          font-weight: 600;
+          color: #555;
+        }
+
+        .name {
+          display: inline;
+        }
+
+        .cart-info {
+          /* flex-direction: column; */
+          align-items: start;
+          justify-content: space-between;
+          flex-wrap: nowrap;
+          padding: 20px 0;
+        }
+
+        .cart-info img {
+          width: 50%;
+          height: auto;
+          border-radius: 10px;
+        }
+        .sub-total {
+          display: flex;
+          justify-content: center;
+        }
+        .sub-total span {
+          font-weight: 600;
+          font-size: 1.8rem;
+        }
+
+        .total-price table {
+          float: none;
+          margin: auto;
+        }
+      }
     </style>
   </head>
 
@@ -141,9 +210,9 @@
     </div>
 
     <!-- Cart Items -->
-    <div class="small-container cart-items" x-data="cartPage()">
+    <div class="small-container" x-data="cartPage()">
       <div class="row row-2">
-        <h2>Keranjang Anda</h2>
+        <!-- <h2>Keranjang Anda</h2> -->
         <a href="products.html" class="btn">Tambah Product</a>
       </div>
       <template x-if="cart.length > 0">
@@ -166,11 +235,13 @@
                       <div>
                         <p x-text="item.name"></p>
                         <small>Harga: <span x-text="rupiah(item.price)"></span></small><br />
-                        <a href="#" @click.prevent="removeFromCart(item.id)">Remove</a>
+                        <a href="#" @click.prevent="removeFromCart(item.id)" style="font-size: 15px">Remove</a>
+                        <br />
                       </div>
                     </div>
                   </td>
                   <td>
+                    <span class="name">Quality</span>
                     <div class="qty-control">
                       <button @click="decreaseQty(item.id)">−</button>
                       <input type="text" min="1" :value="item.quantity" @input="updateQty(item.id, parseInt($event.target.value))" />
@@ -179,14 +250,19 @@
                   </td>
 
                   <td>
+                    <span class="name"> Durasi (Hari)</span>
                     <div class="qty-control">
+                      <!-- <span>qty</span> -->
                       <button @click="decreaseDuration(item.id)">−</button>
                       <input type="text" min="1" :value="item.duration || 1" @input="updateDuration(item.id, parseInt($event.target.value))" />
                       <button @click="increaseDuration(item.id)">+</button>
                     </div>
                   </td>
-
-                  <td><span x-text="rupiah(item.price * item.quantity * (item.duration || 1))"></span></td>
+                  <td align="center">
+                    <div class="sub-total">
+                      <span x-text="rupiah(item.price * item.quantity * (item.duration || 1))"></span>
+                    </div>
+                  </td>
                 </tr>
               </template>
             </tbody>
@@ -235,11 +311,10 @@
                 <td><span x-text="useDelivery ? 'Akan dikonfirmasi via WhatsApp' : 'Rp 0'"></span></td>
               </tr>
               <tr>
-                <td>Total</td>
-                <td><span x-text="rupiah(calculateTotal())"></span></td>
+                <td>Total Pembayaran</td>
+                <td><span x-text="rupiah(calculateTotal())" style="font-size: 2rem; font-weight: 600"></span></td>
               </tr>
               <tr>
-                <td></td>
                 <td>
                   <a href="#" @click.prevent="checkout()" class="btn"><i class="bx bx-cart"></i> Kirim via WhatsApp</a>
                 </td>
